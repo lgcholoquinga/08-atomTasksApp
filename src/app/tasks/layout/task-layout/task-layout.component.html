@@ -1,0 +1,16 @@
+<main class="sm:grid sm:grid-rows-[60px_1fr] h-screen">
+	<div
+		class="bg-indigo-700 flex justify-between flex-wrap gap-3 sm:gap-0 items-center p-2 sticky top-0 left-0 right-0 z-50"
+	>
+		<h1 class="text-white text-2xl font-bold sm-none">AtomTasks</h1>
+
+		<div class="flex items-center flex-wrap w-full sm:w-auto gap-4">
+			<h1 class="text-white font-semibold text-[16px]">Welcome: luisger3434</h1>
+			<button pButton severity="secondary" class="w-full sm:w-auto">Logout</button>
+		</div>
+	</div>
+
+	<div class="overflow-auto p-2">
+		<router-outlet />
+	</div>
+</main>
