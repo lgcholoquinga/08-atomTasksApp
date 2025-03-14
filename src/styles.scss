@@ -7,16 +7,21 @@
 
 select.ng-invalid.ng-touched,
 input.ng-invalid.ng-touched,
-input.ng-invalid.ng-dirty {
+input.ng-invalid.ng-dirty,
+textarea.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-dirty {
 	border: var(--border-input) solid var(--error-color) !important;
 }
 
 select.ng-invalid.ng-touched:focus,
 input.ng-invalid.ng-touched:focus,
-input.ng-invalid.ng-dirty :focus {
+input.ng-invalid.ng-dirty :focus,
+textarea.ng-invalid.ng-touched:focus,
+textarea.ng-invalid.ng-dirty :focus {
 	border-color: var(--error-color) !important;
 }
 
-input.ng-valid {
+input.ng-valid,
+textarea.ng-valid {
 	border-color: var(--p-inputtext-focus-border-color) !important;
 }

@@ -1,0 +1,22 @@
+<h3 class="text-xl font-bold">Create a new task</h3>
+
+<form class="mt-5 w-full sm:max-w-120" autocomplete="off" [formGroup]="form" (ngSubmit)="onSave()">
+	<p-floatlabel variant="in">
+		<input type="title" pInputText id="title" autocomplete="off" class="w-full" formControlName="title" />
+		<label for="title">Title</label>
+	</p-floatlabel>
+
+	<p-floatlabel variant="in" class="mt-4">
+		<textarea
+			type="description"
+			pTextarea
+			id="description"
+			autocomplete="off"
+			class="w-full"
+			formControlName="description"
+		></textarea>
+		<label for="description">Description</label>
+	</p-floatlabel>
+
+	<button type="submit" pButton class="my-5 w-full cursor-pointer">Save</button>
+</form>

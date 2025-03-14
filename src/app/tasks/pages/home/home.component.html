@@ -1,4 +1,14 @@
 <section>
-	<h1 class="text-2xl font-semibold text-center">Welcome to Tasks App</h1>
+	<h1 class="text-2xl font-bold text-center">Welcome to Tasks App</h1>
 	<p-divider />
+	<div class="sm:grid sm:grid-cols-2">
+		<div>
+			<atm-task-form />
+		</div>
+		<div class="mt-4 sm:mt-0">
+			@if (tasks()) {
+				<p>{{ tasks().length }}</p>
+			}
+		</div>
+	</div>
 </section>
