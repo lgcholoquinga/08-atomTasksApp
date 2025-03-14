@@ -7,13 +7,14 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { spinnerInterceptor } from '@common/core/interceptors';
 
 export const appConfig: ApplicationConfig = {
 	providers: [
 		provideZoneChangeDetection({ eventCoalescing: true }),
 		provideRouter(routes),
-		provideHttpClient(),
+		provideHttpClient(withInterceptors([spinnerInterceptor])),
 		provideAnimationsAsync(),
 		providePrimeNG({
 			theme: {

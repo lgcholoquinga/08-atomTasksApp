@@ -54,6 +54,7 @@ export class TaskFormComponent implements OnDestroy {
 			.pipe(takeUntil(this.destroy$))
 			.subscribe({
 				next: (response) => {
+					this.form.reset();
 					if (response) {
 						this.toastService.showNotification('success', 'Task', 'Task created successfully.');
 						return;

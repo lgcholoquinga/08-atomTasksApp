@@ -4,7 +4,7 @@ import { SpinnerService } from '@common/core/services';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
-	selector: 'luc-spinner',
+	selector: 'atm-spinner',
 	imports: [ProgressSpinnerModule],
 	template: ` @if (isLoading()) {
 		<div class="spinner-overlay">

@@ -61,8 +61,20 @@ export class AuthService {
 		);
 	}
 
+	public validateSession(): boolean {
+		const userString = localStorage.getItem('user');
+		if (userString === null) {
+			this.logout();
+			return false;
+		}
+
+		const user = JSON.parse(userString) as User;
+		this._user.set(user);
+		this._authStatus.set(AuthStatus.authenticated);
+		return true;
+	}
+
 	public logout() {
-		localStorage.clear();
 		this._user.set(null);
 		this._authStatus.set(AuthStatus.noAuthenticated);
 	}
