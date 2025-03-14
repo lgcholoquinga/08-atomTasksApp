@@ -14,11 +14,15 @@
 			<td>{{ task.description }}</td>
 			<td>{{ task.createdAt }}</td>
 			<td>
-				<p-toggleswitch [ngModel]="task.completed" (onChange)="onChangeStatus($event)" />
+				<p-toggleswitch
+					[ngModel]="task.completed"
+					[readonly]="task.completed"
+					(onChange)="onChangeStatus($event.checked, task.id)"
+				/>
 			</td>
 			<td>
 				<div class="flex gap-3">
-					<button pButton severity="info">Update</button>
+					<button pButton severity="info" [disabled]="task.completed" (click)="onUpdateTask(task)">Update</button>
 					<button pButton severity="danger" (click)="onDeleteTask(task.id)">Delete</button>
 				</div>
 			</td>

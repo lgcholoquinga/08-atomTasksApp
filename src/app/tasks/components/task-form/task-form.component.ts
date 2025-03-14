@@ -1,10 +1,11 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { TextareaModule } from 'primeng/textarea';
+import { DividerModule } from 'primeng/divider';
 
 import { NgxValidators } from '@common/core/validators';
 import { FormControlErrorDirective, FormSubmitDirective } from '@common/core/directives';
@@ -13,6 +14,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { TaskService } from '@tasks/core/services/task.service';
 import { AuthService } from '@auth/core/services';
 import { ToastService } from '@common/core/services';
+import { ActionForm } from '@common/core/types';
+import { Task } from '@tasks/core/interfaces';
 
 @Component({
 	selector: 'atm-task-form',
@@ -21,6 +24,7 @@ import { ToastService } from '@common/core/services';
 		InputTextModule,
 		FloatLabelModule,
 		TextareaModule,
+		DividerModule,
 		ReactiveFormsModule,
 		FormSubmitDirective,
 		FormControlErrorDirective,
@@ -28,6 +32,10 @@ import { ToastService } from '@common/core/services';
 	templateUrl: './task-form.component.html',
 })
 export class TaskFormComponent implements OnDestroy {
+	public title = input<string>();
+	public action = input<ActionForm>('create');
+	public currentTask = input<Task | null>();
+
 	private fb = inject(FormBuilder);
 	private destroy$ = new Subject<void>();
 	private taskService = inject(TaskService);
@@ -39,7 +47,25 @@ export class TaskFormComponent implements OnDestroy {
 		description: ['', [NgxValidators.required('Description field is required'), NgxValidators.minLength(3)]],
 	});
 
-	onSave() {
+	constructor() {
+		effect(() => {
+			if (this.currentTask()) {
+				this.form.patchValue({ title: this.currentTask()?.title, description: this.currentTask()?.description });
+			} else {
+				this.form.reset();
+			}
+		});
+	}
+
+	public onSubmit() {
+		if (this.action() === 'create') {
+			this.onSave();
+		} else {
+			this.onUpdate();
+		}
+	}
+
+	private onSave() {
 		if (this.form.invalid) {
 			this.form.markAllAsTouched();
 			return;
@@ -66,7 +92,19 @@ export class TaskFormComponent implements OnDestroy {
 			});
 	}
 
-	showErroMessage() {
+	private onUpdate() {
+		this.taskService
+			.updateTask(this.currentTask()!.id, this.form.getRawValue())
+			.pipe(takeUntil(this.destroy$))
+			.subscribe({
+				next: () => {
+					this.toastService.showNotification('success', 'Task', 'Task updated successfully.');
+				},
+				error: (message) => this.toastService.showNotification('error', 'Error', message),
+			});
+	}
+
+	private showErroMessage() {
 		this.toastService.showNotification('error', 'Error', 'Error while creating a task');
 	}
 

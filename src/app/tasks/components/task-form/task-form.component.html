@@ -1,6 +1,8 @@
-<h3 class="text-xl font-bold">Create a new task</h3>
+<p-divider />
 
-<form class="mt-5 w-full sm:max-w-120" autocomplete="off" [formGroup]="form" (ngSubmit)="onSave()">
+<h3 class="text-xl font-bold my-4">{{ title() }}</h3>
+
+<form class="mt-5 w-full sm:max-w-120" autocomplete="off" [formGroup]="form" (ngSubmit)="onSubmit()">
 	<p-floatlabel variant="in">
 		<input type="title" pInputText id="title" autocomplete="off" class="w-full" formControlName="title" />
 		<label for="title">Title</label>
@@ -18,5 +20,11 @@
 		<label for="description">Description</label>
 	</p-floatlabel>
 
-	<button type="submit" pButton class="my-5 w-full cursor-pointer">Save</button>
+	<button type="submit" pButton class="my-5 w-full cursor-pointer">
+		@if (action() === 'create') {
+			Save
+		} @else {
+			Update
+		}
+	</button>
 </form>

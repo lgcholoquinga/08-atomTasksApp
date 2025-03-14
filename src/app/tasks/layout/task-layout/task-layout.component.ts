@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 
 import { AuthService } from '@auth/core/services';
@@ -12,9 +12,15 @@ import { ButtonModule } from 'primeng/button';
 	templateUrl: './task-layout.component.html',
 	providers: [TaskService],
 })
-export default class TaskLayoutComponent {
+export default class TaskLayoutComponent implements OnInit {
 	private authService = inject(AuthService);
 	private router = inject(Router);
+
+	public emailUser = signal('');
+
+	ngOnInit(): void {
+		this.emailUser.set(this.authService.user()!.email);
+	}
 
 	onLogout() {
 		this.authService.logout();

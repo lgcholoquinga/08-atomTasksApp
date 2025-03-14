@@ -2,7 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 
 import { environment } from '@envs/environment';
-import { CreateTaskResponse, DeleteTaskResponse, Task, TaskResponse } from '../interfaces';
+import {
+	CreateTaskResponse,
+	DeleteTaskResponse,
+	Task,
+	TaskResponse,
+	UpdateTask,
+	UpdateTaskResponse,
+} from '../interfaces';
 
 import { catchError, EMPTY, map, Observable, of, switchMap, throwError } from 'rxjs';
 import { AuthService } from '@auth/core/services';
@@ -66,6 +73,17 @@ export class TaskService {
 			switchMap(() => this.getTasks()),
 			map(() => true),
 			catchError(() => throwError(() => 'Error while deleteing task')),
+		);
+	}
+
+	updateTask(id: string, task: UpdateTask): Observable<boolean> {
+		const url = `${this._baseApiUrl}/${id}`;
+
+		return this._http.put<UpdateTaskResponse>(url, task).pipe(
+			map((res) => res.ok),
+			switchMap(() => this.getTasks()),
+			map(() => true),
+			catchError(() => throwError(() => 'Error while updating task')),
 		);
 	}
 }

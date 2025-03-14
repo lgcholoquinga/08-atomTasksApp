@@ -1,4 +1,4 @@
-import { Component, inject, input, OnDestroy } from '@angular/core';
+import { Component, inject, input, OnDestroy, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Task } from '@tasks/core/interfaces';
 
@@ -25,15 +25,36 @@ export class TaskTableComponent implements OnDestroy {
 	private confirmationService = inject(ConfirmationService);
 	private destroy$ = new Subject<void>();
 
-	tasks = input.required<Task[]>();
+	public tasks = input.required<Task[]>();
+	public updateCurrentTask = output<Task>();
 
-	onChangeStatus(event: unknown) {
-		console.log(event);
-		console.log('cambioooo');
+	public onChangeStatus(checked: boolean, id: string) {
+		const message = checked ? 'Task completed !!!' : 'Task not completed !!!';
+		this.taskService
+			.updateTask(id, { completed: checked })
+			.pipe(takeUntil(this.destroy$))
+			.subscribe({
+				next: () => this.toastService.showNotification('info', 'Information', message),
+				error: (message) => this.toastService.showNotification('error', 'Error', message),
+			});
 	}
 
-	onDeleteTask(id: string) {
+	public onDeleteTask(id: string) {
 		this.confirmDeleteTask(id);
+	}
+
+	public onUpdateTask(task: Task) {
+		this.updateCurrentTask.emit(task);
+	}
+
+	private deleteTask(id: string) {
+		this.taskService
+			.deleteTask(id)
+			.pipe(takeUntil(this.destroy$))
+			.subscribe({
+				next: () => this.toastService.showNotification('info', 'Information', 'Task Deleted successfully.'),
+				error: () => this.toastService.showNotification('error', 'Error', 'Error while deleteing task'),
+			});
 	}
 
 	private confirmDeleteTask(id: string) {
@@ -54,16 +75,6 @@ export class TaskTableComponent implements OnDestroy {
 				this.deleteTask(id);
 			},
 		});
-	}
-
-	deleteTask(id: string) {
-		this.taskService
-			.deleteTask(id)
-			.pipe(takeUntil(this.destroy$))
-			.subscribe({
-				next: () => this.toastService.showNotification('info', 'Information', 'Task Deleted successfully.'),
-				error: () => this.toastService.showNotification('error', 'Error', 'Error while deleteing task'),
-			});
 	}
 
 	ngOnDestroy(): void {
