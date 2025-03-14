@@ -1,0 +1,11 @@
+<h1 class="text-4xl font-bold">Hello,</h1>
+<h2 class="text-4xl font-bold">Welcome Back</h2>
+
+<form class="mt-5 w-full sm:max-w-100" autocomplete="off" [formGroup]="form" (ngSubmit)="onSignIn()">
+	<p-floatlabel variant="in">
+		<input type="email" pInputText id="email" autocomplete="off" class="w-full" formControlName="email" />
+		<label for="email">Email</label>
+	</p-floatlabel>
+
+	<button type="submit" pButton class="my-5 w-full cursor-pointer">Signin</button>
+</form>

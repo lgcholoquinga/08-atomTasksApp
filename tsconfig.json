@@ -5,6 +5,13 @@
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
     "strict": true,
+    "baseUrl": "./src/",
+    "paths": {
+      "@common/*": ["app/common/*"],
+      "@tasks/*": ["app/tasks/*"],
+      "@envs/*": ["environments/*"],
+      "@auth/*": ["app/auth/*"],
+    },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
